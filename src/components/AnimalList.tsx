@@ -3,48 +3,43 @@ import { AnimalItem } from "../types/AnimalItem";
 import { initialAnimals } from "../data/data";
 import { getImageUrl } from "../utils/utils";
 
-export type AnimalListProps = {
+type AnimalListProps = {
   initialItems: AnimalItem[];
 };
 
-const AnimalList: React.FC<AnimalListProps> = () => {
-  const [type, setAnimals] = useState<string>("all");
+const AnimalList: React.FC<AnimalListProps> = ({ initialItems }) => {
+  const [type, setType] = useState<string>("all");
 
-  //   function handleClick(e) {
-  //     let type = e.target.id;
-
-  //     if (type && type !== "selector") {
-  //       setAnimals({
-  //         type: type,
-  //         list: initialAnimals.filter((a) => a.type === type),
-  //       });
-  //     } else {
-  //       setAnimals({ type: type, list: initialAnimals });
-  //     }
-  //   }
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    setType((event.target as Element).id);
+  };
 
   return (
     <>
-      {
-        /* <button className="filter-button" id="cute" onClick={handleClick}>
+      <button className="filter-button" id="cute" onClick={handleClick}>
         All Cute Animals
       </button>
       <button className="filter-button" id="scary" onClick={handleClick}>
         All Scary Animals
       </button>
-      <button className="filter-button" id="selector" onClick={handleClick}>
+      <button className="filter-button" id="all" onClick={handleClick}>
         Selectors Choice
-      </button>*/
-        <ul>{getList()}</ul>
-      }
+      </button>
+
+      <ul>{getList(type)}</ul>
     </>
   );
 };
 
 export default AnimalList;
 
-function getList(): any {
-  return initialAnimals.map((animal) => (
+function getList(animalType: string): React.ReactElement[] {
+  let sortedAnimals =
+    animalType === "all"
+      ? initialAnimals
+      : initialAnimals.filter((a) => a.type === animalType);
+
+  return sortedAnimals.map((animal: AnimalItem) => (
     <li className="animal-item" key={"animal-" + animal.id}>
       <img
         className="animal-picture"
