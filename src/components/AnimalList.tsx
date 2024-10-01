@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { AnimalItem } from "../types/AnimalItem";
-import { initialAnimals } from "../data/data";
 import { getImageUrl } from "../utils/utils";
 
 type AnimalListProps = {
@@ -26,18 +25,21 @@ const AnimalList: React.FC<AnimalListProps> = ({ initialItems }) => {
         Selectors Choice
       </button>
 
-      <ul>{getList(type)}</ul>
+      <ul>{getList(type, initialItems)}</ul>
     </>
   );
 };
 
 export default AnimalList;
 
-function getList(animalType: string): React.ReactElement[] {
+function getList(
+  animalType: string,
+  listOfAnimals: AnimalItem[]
+): React.ReactElement[] {
   let sortedAnimals =
     animalType === "all"
-      ? initialAnimals
-      : initialAnimals.filter((a) => a.type === animalType);
+      ? listOfAnimals
+      : listOfAnimals.filter((a) => a.type === animalType);
 
   return sortedAnimals.map((animal: AnimalItem) => (
     <li className="animal-item" key={"animal-" + animal.id}>
